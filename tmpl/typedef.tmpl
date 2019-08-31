@@ -1,0 +1,18 @@
+<div id="{{obj.name}}">
+    <h3 class="methodname">{{obj.name}} <a class="font-icon" href="#{{obj.name}}">&#58216;</a></h3>
+    <p>{{{parse obj.description}}}</p>
+{{#each obj.examples}}
+    {{> example content=this}}
+{{/each}}
+
+    {{#if obj.params}}
+    <h4>Parameters</h4>
+    <table>
+        {{#each obj.params}}
+        <tr>
+            <td>{{name}}</td><td>{{{type-link type}}}</td><td>{{{parse description}}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
+</div>
