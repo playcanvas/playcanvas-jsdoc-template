@@ -2,6 +2,8 @@
   "name": "@playcanvas/jsdoc-template",
   "version": "1.0.1",
   "description": "JSDoc 3 template for PlayCanvas",
+  "author": "PlayCanvas <support@playcanvas.com>",
+  "homepage": "https://playcanvas.com",
   "keywords": [
     "playcanvas",
     "game engine",
