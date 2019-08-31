@@ -18,9 +18,7 @@ var helper = require("jsdoc/util/templateHelper");
  */
 
 
-/**
-* Build an object for a class by collecting, class, methods, events, base class, inherited methods and events
-*/
+// Build an object for a class by collecting, class, methods, events, base class, inherited methods and events
 function getClassInfo(data, cls) {
     var members = [];
     var methods = [];
@@ -103,10 +101,10 @@ function getClassInfo(data, cls) {
             events: []
         };
 
-        for(var i = 0; i < cls.augments.length; i++) {
+        for (var i = 0; i < cls.augments.length; i++) {
             var base = cls.augments[i];
 
-            inherited.cls.push(data({kind: "class", access: {"isUndefined": true}, undocumented: {"isUndefined": true}, "longname": base}).first());
+            inherited.cls.push(data({ kind: "class", access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).first());
 
             all = data({
                 kind: ["member", "function", "event"],
@@ -165,10 +163,11 @@ var clsUrl = function (cls) {
     if (cls.longname) {
         // class object
         return cls.longname + ".html";
-    } else {
-        // class name
-        return cls + ".html";
     }
+
+    // class name
+    return cls + ".html";
+
 };
 
 // Return an anchor link string from a type
@@ -217,7 +216,6 @@ var typeLink = function (type) {
     }
 
 
-
     // Check for builtin type
     if (builtins[name]) {
         url = builtins[name];
@@ -229,24 +227,24 @@ var typeLink = function (type) {
 };
 
 var setupTemplates = function (dir) {
-    handlebars.registerPartial("header", fs.readFileSync(path.join(dir, "tmpl/header.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("navigation", fs.readFileSync(path.join(dir, "tmpl/nav.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("class", fs.readFileSync(path.join(dir, "tmpl/class.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("method", fs.readFileSync(path.join(dir, "tmpl/method.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("property", fs.readFileSync(path.join(dir, "tmpl/property.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("event", fs.readFileSync(path.join(dir, "tmpl/event.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("example", fs.readFileSync(path.join(dir, "tmpl/example.tmpl"), {encoding: "utf-8"}))
-    handlebars.registerPartial("analytics", fs.readFileSync(path.join(dir, "tmpl/analytics.tmpl"), {encoding: "utf-8"}))
+    handlebars.registerPartial("header", fs.readFileSync(path.join(dir, "tmpl/header.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("navigation", fs.readFileSync(path.join(dir, "tmpl/nav.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("class", fs.readFileSync(path.join(dir, "tmpl/class.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("method", fs.readFileSync(path.join(dir, "tmpl/method.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("property", fs.readFileSync(path.join(dir, "tmpl/property.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("event", fs.readFileSync(path.join(dir, "tmpl/event.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("example", fs.readFileSync(path.join(dir, "tmpl/example.tmpl"), { encoding: "utf-8" }));
+    handlebars.registerPartial("analytics", fs.readFileSync(path.join(dir, "tmpl/analytics.tmpl"), { encoding: "utf-8" }));
 
     handlebars.registerHelper("excerpt", function (text) {
         // return the first characters of the string up to and including the first period (.) not inside curly braces
         if (text) {
-            var n = text.search(/\.(?![^{]*})/)
+            var n = text.search(/\.(?![^{]*})/);
             if (n > 0) {
-                return text.slice(0, n+1);
-            } else {
-                return text;
+                return text.slice(0, n + 1);
             }
+            return text;
+
         }
 
         return text;
@@ -275,7 +273,7 @@ var setupTemplates = function (dir) {
         var sig = "(";
 
         if (method.params) {
-            for(var i = 0; i < method.params.length; i++) {
+            for (var i = 0; i < method.params.length; i++) {
                 if (method.params[i].name.indexOf(".") < 0) { // skip object param documentation
                     if (i !== 0) sig += ", ";
                     var name = method.params[i].name;
@@ -300,20 +298,19 @@ var setupTemplates = function (dir) {
             }
 
             return result;
-        }
-        catch (e) {
-            console.error("Can't generate type link. Search output for {{TYPE-ERROR}}")
-            return "{{TYPE-ERROR}}"
+        } catch (e) {
+            console.error("Can't generate type link. Search output for {{TYPE-ERROR}}");
+            return "{{TYPE-ERROR}}";
         }
     });
-}
+};
 
 var copyStaticFiles = function (dir, out, callback) {
     var src = path.join(dir, 'public');
     var dst = path.join(out, 'public');
 
     fse.mkdirsSync(dst);
-    fse.copySync(src,dst);
+    fse.copySync(src, dst);
     callback();
 };
 
@@ -325,10 +322,10 @@ var setup = function (opts, callback) {
         } else {
             console.error(err);
         }
-    })
-}
+    });
+};
 
-exports.publish = function(data, opts) {
+exports.publish = function (data, opts) {
     var outdir = path.join(env.pwd, opts.destination);
     var tmpldir = opts.template;
 
@@ -355,8 +352,8 @@ exports.publish = function(data, opts) {
         });
 
         // Query for list of all classes
-        var classes = data({kind: "class", access: {"isUndefined": true}, undocumented: {"isUndefined": true}}).order("longname").get();
-        var modules = data({kind: "namespace", access: {"isUndefined": true}, undocumented: {"isUndefined": true}}).order("longname").get();
+        var classes = data({ kind: "class", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
+        var modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
 
         classes = modules.concat(classes);
         classes.forEach(function (cls) {
@@ -365,7 +362,7 @@ exports.publish = function(data, opts) {
         });
 
         // Compile the standard page template
-        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/page.tmpl"), {encoding: "utf8"}), {preventIndent: true});
+        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/page.tmpl"), { encoding: "utf8" }), { preventIndent: true });
 
         var count = 0;
         // Create a page for each class
@@ -385,12 +382,12 @@ exports.publish = function(data, opts) {
             var page = tmpl(context);
 
             var outpath = path.join(outdir, cls.longname + ".html");
-            fs.mkPath(outdir)
+            fs.mkPath(outdir);
             fs.writeFileSync(outpath, page, "utf8");
         });
 
-        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/frontpage.tmpl"), {encoding: "utf-8"}), {preventIndent: true});
-        var frontpage = tmpl({env: opts.env, classes: classes});
+        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/frontpage.tmpl"), { encoding: "utf-8" }), { preventIndent: true });
+        var frontpage = tmpl({ env: opts.env, classes: classes });
         var outpath = path.join(outdir, "index.html");
         fs.writeFileSync(outpath, frontpage, "utf8");
     });

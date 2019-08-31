@@ -1,21 +1,21 @@
 function ready(fn) {
-  if (document.readyState != 'loading'){
-    fn();
-  } else {
-    document.addEventListener('DOMContentLoaded', fn);
-  }
+    if (document.readyState != 'loading'){
+        fn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fn);
+    }
 }
 
 if (!String.prototype.endsWith) {
-  String.prototype.endsWith = function(searchString, position) {
-      var subjectString = this.toString();
-      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
-        position = subjectString.length;
-      }
-      position -= searchString.length;
-      var lastIndex = subjectString.indexOf(searchString, position);
-      return lastIndex !== -1 && lastIndex === position;
-  };
+    String.prototype.endsWith = function (searchString, position) {
+        var subjectString = this.toString();
+        if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+            position = subjectString.length;
+        }
+        position -= searchString.length;
+        var lastIndex = subjectString.indexOf(searchString, position);
+        return lastIndex !== -1 && lastIndex === position;
+    };
 }
 
 ready(function () {
@@ -23,7 +23,7 @@ ready(function () {
     var url = window.location.pathname;
 
     var links = document.querySelectorAll("nav.sidebar a");
-    for (var i = 0; i < links.length ; i++) {
+    for (var i = 0; i < links.length; i++) {
         if (url.endsWith(links[i].getAttribute("href"))) {
             links[i].parentNode.classList.add("active");
         }
@@ -68,7 +68,7 @@ ready(function () {
     onScroll();
 
 
-    var onNavButtonClick = function(evt) {
+    var onNavButtonClick = function (evt) {
         if (nav.classList.contains('active')) {
             nav.classList.remove('active');
             navButton.classList.remove('active');
@@ -83,7 +83,7 @@ ready(function () {
     navButton.addEventListener('mousedown', onNavButtonClick, false);
     navButton.addEventListener('touchstart', onNavButtonClick, false);
 
-    var onMainContentClick = function(evt) {
+    var onMainContentClick = function (evt) {
         if (nav.classList.contains('active')) {
             nav.classList.remove('active');
             navButton.classList.remove('active');
@@ -101,7 +101,7 @@ ready(function () {
 
         var els = document.querySelectorAll("nav.sidebar li");
 
-        for(var i = 0; i < els.length; i++) {
+        for (var i = 0; i < els.length; i++) {
             if (els[i].id.toLowerCase().indexOf(value.toLowerCase()) < 0) {
                 if (els[i].classList) {
                     els[i].classList.add("hidden");
@@ -113,8 +113,8 @@ ready(function () {
     var clearFilter = function () {
         var els = document.querySelectorAll("nav.sidebar li");
 
-        for(var i = 0; i < els.length; i++) {
-            if(els[i].classList) {
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].classList) {
                 els[i].classList.remove("hidden");
             }
         }
