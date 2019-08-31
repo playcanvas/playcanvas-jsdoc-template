@@ -28,6 +28,7 @@ function getClassInfo(data, cls) {
     // get all data used by classes
     var all = data({
         kind: ["member", "function", "event"],
+        kind: ["constant", "member", "function", "event"],
         access: {
             "isUndefined": true
         },
@@ -42,7 +43,7 @@ function getClassInfo(data, cls) {
 
     // sort into different kinds
     all.map(function (i) {
-        if (i.kind === "member") {
+        if (i.kind === "member" || i.kind  === "constant") {
             if (i.scope === 'instance') {
                 if (!cls.properties) {
                     cls.properties = [];
