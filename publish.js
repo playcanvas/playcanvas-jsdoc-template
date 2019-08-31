@@ -28,7 +28,7 @@ function getClassInfo(data, cls) {
 
     // get all data used by classes
     var all = data({
-        kind: ["member", "function", "event", "typedef"],
+        kind: ["constant", "member", "function", "event", "typedef"],
         access: {
             "isUndefined": true
         },
@@ -43,7 +43,7 @@ function getClassInfo(data, cls) {
 
     // sort into different kinds
     all.map(function (i) {
-        if (i.kind === "member") {
+        if (i.kind === "member" || i.kind  === "constant") {
             if (i.scope === 'instance') {
                 if (!cls.properties) {
                     cls.properties = [];
@@ -108,7 +108,7 @@ function getClassInfo(data, cls) {
         for (var i = 0; i < cls.augments.length; i++) {
             var base = cls.augments[i];
 
-            inherited.cls.push(data({ kind: "class", access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).first());
+            inherited.cls.push(data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).first());
 
             all = data({
                 kind: ["member", "function", "event"],
@@ -178,6 +178,8 @@ var clsUrl = function (cls) {
 // Return an anchor link string from a type
 var typeLink = function (type) {
     var builtins = {
+        "Undefined": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined",
+        "Null": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null",
         "Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
         "ArrayBuffer": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
         "Boolean": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -359,12 +361,12 @@ exports.publish = function (data, opts) {
         });
 
         // Query for list of all classes
-        var classes = data({ kind: "class", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
+        var classes = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
         var modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
 
         classes = modules.concat(classes);
         classes.forEach(function (cls) {
-            cls._class = (cls.kind === "class");
+            cls._class = (cls.kind === "class" || cls.kind === "interface");
             cls._namespace = (cls.kind === "namespace");
         });
 
