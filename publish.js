@@ -104,7 +104,7 @@ function getClassInfo(data, cls) {
         for (var i = 0; i < cls.augments.length; i++) {
             var base = cls.augments[i];
 
-            inherited.cls.push(data({kind: ["class", "interface"], access: {"isUndefined": true}, undocumented: {"isUndefined": true}, "longname": base}).first());
+            inherited.cls.push(data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).first());
 
             all = data({
                 kind: ["member", "function", "event"],
