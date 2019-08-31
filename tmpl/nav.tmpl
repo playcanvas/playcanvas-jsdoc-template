@@ -1,0 +1,16 @@
+<nav class="sidebar">
+    <div class="sidebarFilter">
+        <input id="filter-input" type="text" placeholder="Filter">
+    </div>
+    <ul>
+    {{#each classes}}
+        {{#if this._class}}
+        <li id="nav-{{longname}}"><a href="{{clsurl this}}">{{name}}</a></li>
+        {{/if}}
+        {{#if this._namespace}}
+        <li id="nav-{{longname}}"><a href="{{clsurl this}}">{{longname}}</a></li>
+        {{/if}}
+    {{/each}}
+    </ul>
+</nav>
+<div class='sidebarToggle'><span></span>Class List</div>

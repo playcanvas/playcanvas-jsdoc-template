@@ -1,0 +1,7 @@
+<div id="{{obj.name}}">
+    <span class="property">{{{type-link obj.type}}}</span><span class="property">{{obj.name}} <a class="font-icon" href="#{{obj.name}}">&#58216;</a></span>
+    <p>{{{parse obj.description}}}{{{readonly obj}}}</p>
+{{#each obj.examples}}
+    {{> example content=this}}
+{{/each}}
+</div>

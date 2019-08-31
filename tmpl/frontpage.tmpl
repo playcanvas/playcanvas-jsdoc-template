@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=0.5">
+
+        <link rel="icon" type="image/png" href="public/images/favicon_docs.png">
+
+        <link href="public/css/styles.css" rel="stylesheet">
+        <link href="public/css/playcanvas-theme.css" rel="stylesheet">
+        <script src="public/js/interface.js"></script>
+        <script src="public/js/highlight.min.js"></script>
+
+        <script>hljs.initHighlightingOnLoad();</script>
+
+        <title>PlayCanvas API Reference</title>
+    </head>
+
+    <body>
+        {{> header header-icon="&#58195;" header-title="API Reference"}}
+        <div class="container content-width">
+            {{> navigation}}
+            <main>
+<h1>PlayCanvas API Reference</h1>
+
+<p>Welcome to the PlayCanvas API Reference! These pages document the public interface to the PlayCanvas Engine used when scripting your PlayCanvas applications.</p>
+
+<p>The PlayCanvas Engine is written in JavaScript. If you are new to JavaScript, we recommend you visit <a href="https://www.codecademy.com/learn/javascript">Code Academy</a> for a fun introduction to the language.</p>
+
+<p>Before you dive into the API, you should get to know the core principles of scripting in PlayCanvas. The User Manual has a <a href="https://developer.playcanvas.com/en/user-manual/scripting/">whole topic</a> on the subject.</p>
+
+<h2>The pc Namespace</h2>
+
+<p>The API is contained within an object named <code>pc</code>. We refer to this as a namespace. Any objects that you create will be defined within this namespace. For example, if you create a new 3D vector object, you would do:</p>
+
+<pre>
+var v = new pc.Vec3();
+</pre>
+
+<h2>Navigating the API</h2>
+
+<p>The API defines many classes (shown here on the left). It’s not immediately obvious where to start! Let’s describe a PlayCanvas application and map that to some of the available classes.</p>
+
+<p>Every application you create instantiates a single <a href="https://developer.playcanvas.com/en/api/pc.Application.html"><code>pc.Application</code></a> object. This object manages the lifecycle of your application: initialization, update loop and termination. When creating an app in the PlayCanvas Editor, the pc.Application is created for you but you can still access it via this.app from your scripts.</p>
+
+<p>The application object exposes a number of useful properties, giving you access to input devices (<a href="https://developer.playcanvas.com/en/api/pc.Mouse.html"><code>pc.Mouse</code></a>, <a href="https://developer.playcanvas.com/en/api/pc.Keyboard.html"><code>pc.Keyboard</code></a>, <a href="https://developer.playcanvas.com/en/api/pc.GamePads.html"><code>pc.GamePads</code></a>), the graphics device (<a href="https://developer.playcanvas.com/en/api/pc.GraphicsDevice.html"><code>pc.GraphicsDevice</code></a>), the current scene (<a href="https://developer.playcanvas.com/en/api/pc.Scene.html"><code>pc.Scene</code></a>) and the root entity of the scene graph (<a href="https://developer.playcanvas.com/en/api/pc.Entity.html"><code>pc.Entity</code></a>).</p>
+
+<p>Entities are discrete things in your application such as a character or a vehicle. The pc.Entity API is useful for transforming (positioning/rotating/scaling) entities, as well as adding and removing components.</p>
+
+<p>Components grant entities extra functionality, such as audio playback, 3D model rendering and so on. For each component, there are two classes defined: a component and component system. For example, the camera component defines <a href="https://developer.playcanvas.com/en/api/pc.CameraComponent.html"><code>pc.CameraComponent</code></a> and <a href="https://developer.playcanvas.com/en/api/pc.CameraComponentSystem.html"><code>pc.CameraComponentSystem</code></a>. The component class defines functions and properties for individual components whereas the component system class defines functions and properties global to all components of that type. Accessing a property on a component looks something like this:</p>
+
+<pre>
+var aspect = this.entity.camera.aspectRatio;
+</pre>
+
+<h2>Help Us Improve the API Reference</h2>
+
+<p>PlayCanvas is an open source engine and you can explore the repo on <a href="https://github.com/playcanvas/engine">GitHub</a>. This API Reference is generated from documentation entered directly into the source using <a href="http://usejsdoc.org/">JSDoc</a> format. We encourage you to get involved and contribute to the project by submitting pull requests and reporting issues as and when you find them.</p>
+            </main>
+        </div>
+        {{> analytics}}
+    </body>
+
+</html>

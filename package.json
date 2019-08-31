@@ -1,0 +1,34 @@
+{
+  "name": "@playcanvas/jsdoc-template",
+  "version": "1.0.0",
+  "description": "JSDoc template for PlayCanvas",
+  "keywords": [
+    "playcanvas",
+    "game engine",
+    "webgl",
+    "webgl2",
+    "3d",
+    "jsdoc"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/playcanvas/jsdoc-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/playcanvas/jsdoc-template.git"
+  },
+  "scripts": {
+    "build": "sass --no-source-map sass/styles.scss static/css/styles.css",
+    "lint": "eslint .",
+    "test": "npm run lint"
+  },
+  "devDependencies": {
+    "fs-extra": "0.24.0",
+    "handlebars": "4.0.3",
+    "eslint": "^6.2.2",
+    "eslint-config-playcanvas": "^1.2.0",
+    "sass": "^1.22.10",
+    "taffydb": "^2.7.3"
+  }
+}

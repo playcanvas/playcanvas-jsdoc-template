@@ -1,0 +1,214 @@
+{{#with cls}}
+<main class="cls">
+    <h1>{{cls.longname}}</h1>
+    {{#each cls.augments}}
+    <p class="extends">Extends: <a href="{{clsurl this}}">{{this}}</a></p>
+    {{/each}}
+    <p>{{{parse cls.classdesc}}}</p>
+    {{#if cls._namespace}}
+    <p>{{{parse cls.description}}}</p>
+    {{/if}}
+    {{#each cls.examples}}
+        {{> example content=this}}
+    {{/each}}
+
+    <!-- summary -->
+    <h1>Summary</h1>
+
+    <!--static properties-->
+    {{#if members}}
+    <h3>Static Properties</h3>
+    <table class="properties">
+    {{#each members}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}{{{readonly this}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--static methods-->
+    {{#if staticMethods}}
+    <h3>Static Methods</h3>
+    <table class="properties">
+    {{#each staticMethods}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--properties-->
+    {{#if cls.properties}}
+    <h3>Properties</h3>
+    <table class="properties">
+    {{#each cls.properties}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}{{{readonly this}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--methods-->
+    {{#if methods}}
+    <h3>Methods</h3>
+    <table class="properties">
+    {{#each methods}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--events-->
+    {{#if events}}
+    <h3>Events</h3>
+    <table class="properties">
+    {{#each events}}
+    <tr>
+        <td><a href="#event:{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    {{#if cls.augments.length}}
+    <h2>Inherited</h2>
+
+    <!--inherited methods-->
+    {{#if inherited.staticMethods}}
+    <h3>Static Methods</h3>
+    <table class="properties">
+    {{#each inherited.staticMethods}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    {{#each inherited.cls}}
+        <!--inherited properties-->
+        {{#if properties}}
+        <h3>Properties</h3>
+        <table class="properties">
+        {{#each properties}}
+        <tr>
+            <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}{{{readonly this}}}</td>
+        </tr>
+        {{/each}}
+        </table>
+        {{/if}}
+    {{/each}}
+
+    <!--inherited static methods-->
+    {{#if inherited.methods}}
+    <h3>Methods</h3>
+    <table class="properties">
+    {{#each inherited.methods}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--inherited events-->
+    {{#if inherited.events}}
+    <h3>Events</h3>
+    <table class="properties">
+    {{#each inherited.events}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    {{/if}}
+
+    <h1>Details</h1>
+
+    <!--static members-->
+    {{#if members}}
+    <h2>Static Properties</h2>
+    <table class="members">
+        {{#each members}}
+    <tr>
+        <td id="{{name}}">{{name}}</td><td>{{{parse description}}}{{{readonly this}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
+    <!--static methods-->
+    {{#if staticMethods}}
+    <h2>Static Methods</h2>
+    {{#each staticMethods}}
+        {{> method obj=this}}
+    {{/each}}
+    {{/if}}
+
+    {{#if cls._class}}
+    <h2>Constructor</h2>
+    <!-- Constructor -->
+    {{> method obj=cls}}
+    {{/if}}
+
+    <!--properties-->
+    {{#if cls.properties}}
+    <h2>Properties</h2>
+    {{#each cls.properties}}
+        {{> property obj=this}}
+    {{/each}}
+    {{/if}}
+
+    <!--methods-->
+    {{#if methods}}
+    <h2>Methods</h2>
+    {{#each methods}}
+        {{> method obj=this}}
+    {{/each}}
+    {{/if}}
+
+    <!--events-->
+    {{#if events}}
+    <h2>Events</h2>
+    {{#each events}}
+        {{> event obj=this}}
+    {{/each}}
+    {{/if}}
+
+    {{#if cls.augments.length}}
+    <h2>Inherited</h2>
+    <!--inherited properties-->
+    {{#each inherited.cls}}
+        {{#if properties}}
+        <h2>Properties</h2>
+        {{#each properties}}
+            {{> property obj=this}}
+        {{/each}}
+        {{/if}}
+    {{/each}}
+
+    <!--inherited methods-->
+    {{#if inherited.methods}}
+    <h2>Methods</h2>
+    {{#each inherited.methods}}
+        {{> method obj=this}}
+    {{/each}}
+    {{/if}}
+
+    <!--inherited events-->
+    {{#if inherited.events}}
+    <h2>Events</h2>
+    {{#each inherited.events}}
+        {{> event obj=this}}
+    {{/each}}
+    {{/if}}
+    {{/if}}
+</main>
+{{/with}}
