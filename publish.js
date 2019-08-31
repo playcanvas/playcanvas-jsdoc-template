@@ -220,10 +220,11 @@ var typeLink = function (type) {
         display = name;
     }
 
-
     // Check for builtin type
     if (builtins[name]) {
         url = builtins[name];
+    } else if (name.startsWith("pc.callbacks")) {
+        url = "pc.callbacks.html#" + name.substring("pc.callbacks.".length);
     } else {
         url = clsUrl(name);
     }
