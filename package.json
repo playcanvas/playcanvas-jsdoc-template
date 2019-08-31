@@ -1,7 +1,7 @@
 {
   "name": "@playcanvas/jsdoc-template",
   "version": "1.0.0",
-  "description": "JSDoc template for PlayCanvas",
+  "description": "JSDoc 3 template for PlayCanvas",
   "keywords": [
     "playcanvas",
     "game engine",
@@ -12,11 +12,11 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/playcanvas/jsdoc-template/issues"
+    "url": "https://github.com/playcanvas/playcanvas-jsdoc-template/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/playcanvas/jsdoc-template.git"
+    "url": "git://github.com/playcanvas/playcanvas-jsdoc-template.git"
   },
   "scripts": {
     "build": "sass --no-source-map sass/styles.scss static/css/styles.css",
