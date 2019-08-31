@@ -1,6 +1,6 @@
 {
   "name": "@playcanvas/jsdoc-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JSDoc 3 template for PlayCanvas",
   "keywords": [
     "playcanvas",
@@ -24,11 +24,13 @@
     "test": "npm run lint"
   },
   "devDependencies": {
-    "fs-extra": "^8.1.0",
-    "handlebars": "^4.1.2",
     "eslint": "^6.3.0",
     "eslint-config-playcanvas": "^1.2.0",
     "sass": "^1.22.10",
     "taffydb": "^2.7.3"
-  }
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "handlebars": "^4.1.2"
+  } 
 }
