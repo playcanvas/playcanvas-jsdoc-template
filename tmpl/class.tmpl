@@ -15,6 +15,18 @@
     <!-- summary -->
     <h1>Summary</h1>
 
+    <!--type definitions-->
+    {{#if typedefs}}
+    <h3>Type Defintions</h3>
+    <table class="properties">
+    {{#each typedefs}}
+    <tr>
+        <td><a href="#{{name}}">{{name}}</a></td><td>{{{parse (excerpt description)}}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+
     <!--static properties-->
     {{#if members}}
     <h3>Static Properties</h3>
@@ -131,6 +143,14 @@
     {{/if}}
 
     <h1>Details</h1>
+
+    <!--type definitions-->
+    {{#if typedefs}}
+    <h2>Type Defintions</h2>
+    {{#each typedefs}}
+        {{> typedef obj=this}}
+    {{/each}}
+    {{/if}}
 
     <!--static members-->
     {{#if members}}
