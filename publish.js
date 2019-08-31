@@ -24,10 +24,11 @@ function getClassInfo(data, cls) {
     var methods = [];
     var staticMethods = [];
     var events = [];
+    var typedefs = [];
 
     // get all data used by classes
     var all = data({
-        kind: ["member", "function", "event"],
+        kind: ["member", "function", "event", "typedef"],
         access: {
             "isUndefined": true
         },
@@ -66,6 +67,8 @@ function getClassInfo(data, cls) {
             }
         } else if (i.kind === "event") {
             events.push(i);
+        } else if (i.kind === "typedef") {
+            typedefs.push(i);
         }
     });
 
@@ -90,6 +93,7 @@ function getClassInfo(data, cls) {
     methods.sort(alphaSort);
     staticMethods.sort(alphaSort);
     events.sort(alphaSort);
+    typedefs.sort(alphaSort);
 
     var inherited = null;
     if (cls.augments && cls.augments.length) {
@@ -154,7 +158,8 @@ function getClassInfo(data, cls) {
         methods: methods.length ? methods : null,
         staticMethods: staticMethods.length ? staticMethods : null,
         members: members.length ? members : null,
-        events: events.length ? events : null
+        events: events.length ? events : null,
+        typedefs: typedefs.length ? typedefs : null
     };
 }
 
