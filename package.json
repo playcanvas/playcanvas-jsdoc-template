@@ -1,6 +1,6 @@
 {
   "name": "@playcanvas/jsdoc-template",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "JSDoc 3 template for PlayCanvas",
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://playcanvas.com",
@@ -24,7 +24,7 @@
     "extends": "eslint-config-playcanvas"
   },
   "scripts": {
-    "build": "sass --no-source-map sass/styles.scss public/css/styles.css --style compressed",
+    "build": "sass --no-source-map sass/styles.scss static/styles/styles.css",
     "lint": "eslint .",
     "test": "npm run lint"
   },
