@@ -186,6 +186,9 @@ var typeLink = function (type) {
         "Error": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
         "Function": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
         "HTMLImageElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement",
+        "HTMLVideoElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
+        "HTMLAudioElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement",
+        "HTMLCanvasElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement",
         "KeyboardEvent": "https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent",
         "MouseEvent": "https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent",
         "Number": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -198,6 +201,7 @@ var typeLink = function (type) {
         "AudioBuffer": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer",
         "AudioContext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
         "AudioBufferSourceNode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
+        "Window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
         "*": "#" // blerg
     };
 
