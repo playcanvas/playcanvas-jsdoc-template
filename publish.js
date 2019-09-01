@@ -1,6 +1,5 @@
 var template = require('jsdoc/template');
 var fs = require('jsdoc/fs');
-var fse = require("fs-extra");
 var path = require('jsdoc/path');
 var handlebars = require("handlebars");
 var helper = require("jsdoc/util/templateHelper");
@@ -314,12 +313,23 @@ var setupTemplates = function (dir) {
     });
 };
 
-var copyStaticFiles = function (dir, out, callback) {
-    var src = path.join(dir, 'public');
-    var dst = path.join(out, 'public');
+var copyStaticFiles = function (dir, outdir, callback) {
+    let fromDir;
+    let staticFiles;
 
-    fse.mkdirsSync(dst);
-    fse.copySync(src, dst);
+    fs.mkPath(outdir);
+
+    // copy the template's static files to outdir
+    fromDir = path.join(dir, 'public');
+    staticFiles = fs.ls(fromDir, 3);
+
+    staticFiles.forEach(fileName => {
+        const toDir = fs.toDir( fileName.replace(fromDir, outdir) );
+
+        fs.mkPath(toDir);
+        fs.copyFileSync(fileName, toDir);
+    });
+
     callback();
 };
 

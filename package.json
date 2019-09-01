@@ -24,7 +24,7 @@
     "extends": "eslint-config-playcanvas"
   },
   "scripts": {
-    "build": "sass --no-source-map sass/styles.scss public/css/styles.css",
+    "build": "sass --no-source-map sass/styles.scss public/css/styles.css --style compressed",
     "lint": "eslint .",
     "test": "npm run lint"
   },
@@ -35,7 +35,6 @@
     "taffydb": "^2.7.3"
   },
   "dependencies": {
-    "fs-extra": "^8.1.0",
     "handlebars": "^4.1.2"
   } 
 }
