@@ -320,7 +320,7 @@ var copyStaticFiles = function (dir, outdir, callback) {
     fs.mkPath(outdir);
 
     // copy the template's static files to outdir
-    fromDir = path.join(dir, 'public');
+    fromDir = path.join(dir, 'static');
     staticFiles = fs.ls(fromDir, 3);
 
     staticFiles.forEach(fileName => {
