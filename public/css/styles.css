@@ -82,7 +82,7 @@ body {
 }
 body > header {
   height: 168px;
-  background-image: url(/images/common/BANNER_STRIPS1_Orange.png);
+  background-image: url(public/images/playcanvas-header-background.png);
   background-position: center;
   background-color: #F16524;
   color: rgba(255, 255, 255, 0.75);

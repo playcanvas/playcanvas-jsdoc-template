@@ -24,7 +24,7 @@
     "extends": "eslint-config-playcanvas"
   },
   "scripts": {
-    "build": "sass --no-source-map sass/styles.scss static/css/styles.css",
+    "build": "sass --no-source-map sass/styles.scss public/css/styles.css",
     "lint": "eslint .",
     "test": "npm run lint"
   },
