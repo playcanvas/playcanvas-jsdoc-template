@@ -202,6 +202,9 @@ var typeLink = function (type) {
         "AudioContext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
         "AudioBufferSourceNode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
         "Window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
+        "Uint8Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+        "Uint16Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+        "Float32Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
         "*": "#" // blerg
     };
 
