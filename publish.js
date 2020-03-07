@@ -208,7 +208,7 @@ var typeLink = function (type) {
         "*": "#" // blerg
     };
 
-    var re = /Array.<(.*)>/; // regexp for arrays of types
+    var regexArrayPattern = /Array.<(.*)>/; // regexp for arrays of types
     var regexTypeOfPattern = /Class.<(.*)>/; // regexp for referencing the class type itself (not the instance)
     var url = null; // URL to link to type
     var name; // name of type
@@ -221,9 +221,9 @@ var typeLink = function (type) {
     }
 
     // Check for array
-    var result = re.exec(name);
-    if (result) {
-        name = result[1];
+    var regexArrayMatch = regexArrayPattern.exec(name);
+    if (regexArrayMatch) {
+        name = regexArrayMatch[1];
         display = name + "[]";
     } else {
         display = name;
