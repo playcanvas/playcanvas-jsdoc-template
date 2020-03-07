@@ -209,6 +209,7 @@ var typeLink = function (type) {
     };
 
     var re = /Array.<(.*)>/; // regexp for arrays of types
+    var regexTypeOfPattern = /Class.<(.*)>/; // regexp for referencing the class type itself (not the instance)
     var url = null; // URL to link to type
     var name; // name of type
     var display = null; // display name of type
@@ -224,6 +225,15 @@ var typeLink = function (type) {
     if (result) {
         name = result[1];
         display = name + "[]";
+    } else {
+        display = name;
+    }
+
+    // Check for typeof
+    var regexTypeOfMatch = regexTypeOfPattern.exec(name);
+    if (regexTypeOfMatch) {
+        name = regexTypeOfMatch[1];
+        display = "typeof " + name;
     } else {
         display = name;
     }
