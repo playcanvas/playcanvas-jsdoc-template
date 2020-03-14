@@ -174,22 +174,29 @@ var clsUrl = function (cls) {
 
 };
 
-// Unwrap type (if array or class reference)
-var unwrapType = function (name) {
+// Recursively unwrap type (if array or class reference)
+var unwrapType = function (name, display) {
     var match;
+    var type;
 
     // Check for arrays of types
     match = /^Array.<(.*)>$/i.exec(name);
     if (match) {
         name = match[1];
-        display = name + "[]";
+
+        type = unwrapType(name, display);
+        display = type.display + "[]";
+        name = type.name;
     }
 
     // Check for class reference types (as opposed to class instances)
     match = /^Class.<(.*)>$/i.exec(name);
     if (match) {
         name = match[1];
-        display = "typeof(" + name + ")";
+
+        type = unwrapType(name, display);
+        display = "typeof(" + type.display + ")";
+        name = type.name;
     }
 
     return {
