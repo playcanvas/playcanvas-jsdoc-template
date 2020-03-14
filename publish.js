@@ -239,8 +239,9 @@ var typeLink = function (type) {
     }
 
     // Check for builtin type
-    if (builtins[name]) {
-        url = builtins[name];
+    var builtin = builtins[name.toLowerCase()];
+    if (builtin) {
+        url = builtin;
     } else if (name.startsWith("pc.callbacks")) {
         url = "pc.callbacks.html#" + name.substring("pc.callbacks.".length);
     } else {
