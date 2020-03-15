@@ -174,6 +174,37 @@ var clsUrl = function (cls) {
 
 };
 
+// Recursively unwrap type (if array or class reference)
+var unwrapType = function (name, display) {
+    var match;
+    var type;
+
+    // Check for arrays of types
+    match = /^Array.<(.*)>$/i.exec(name);
+    if (match) {
+        name = match[1];
+
+        type = unwrapType(name, display);
+        display = type.display + "[]";
+        name = type.name;
+    }
+
+    // Check for class reference types (as opposed to class instances)
+    match = /^Class.<(.*)>$/i.exec(name);
+    if (match) {
+        name = match[1];
+
+        type = unwrapType(name, display);
+        display = "typeof(" + type.display + ")";
+        name = type.name;
+    }
+
+    return {
+        name: name,
+        display: display || name,
+    };
+}
+
 // Return an anchor link string from a type
 var typeLink = function (type) {
     var builtins = {
@@ -208,9 +239,6 @@ var typeLink = function (type) {
         "*": "#" // blerg
     };
 
-    var isArray = false;
-    var regexArrayPattern = /^Array.<(.*)>$/; // regexp for arrays of types
-    var regexTypeOfPattern = /^Class.<(.*)>$/; // regexp for referencing the class type itself (not the instance)
     var url = null; // URL to link to type
     var name; // name of type
     var display = null; // display name of type
@@ -220,23 +248,10 @@ var typeLink = function (type) {
     if (type.longname) {
         name = type.longname;
     }
-    display = name;
 
-    // Check for array
-    var regexArrayMatch = regexArrayPattern.exec(name);
-    if (regexArrayMatch) {
-        name = regexArrayMatch[1];
-        display = name + "[]";
-        isArray = true;
-    }
-
-    // Check for typeof
-    var regexTypeOfMatch = regexTypeOfPattern.exec(name);
-    if (regexTypeOfMatch) {
-        name = regexTypeOfMatch[1];
-        display = "typeof " + name;
-        if (isArray) display = "(" + display + ")[]";
-    }
+    var unwrapped = unwrapType(name);
+    name = unwrapped.name;
+    display = unwrapped.display;
 
     // Check for builtin type
     var builtin = builtins[name.toLowerCase()];
