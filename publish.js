@@ -174,43 +174,71 @@ var clsUrl = function (cls) {
 
 };
 
+// Recursively unwrap type (if array or class reference)
+var unwrapType = function (name, display) {
+    var match;
+    var type;
+
+    // Check for arrays of types
+    match = /^Array.<(.*)>$/i.exec(name);
+    if (match) {
+        name = match[1];
+
+        type = unwrapType(name, display);
+        display = type.display + "[]";
+        name = type.name;
+    }
+
+    // Check for class reference types (as opposed to class instances)
+    match = /^Class.<(.*)>$/i.exec(name);
+    if (match) {
+        name = match[1];
+
+        type = unwrapType(name, display);
+        display = "typeof(" + type.display + ")";
+        name = type.name;
+    }
+
+    return {
+        name: name,
+        display: display || name,
+    };
+}
+
 // Return an anchor link string from a type
 var typeLink = function (type) {
     var builtins = {
-        "Undefined": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined",
-        "Null": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null",
-        "Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
-        "ArrayBuffer": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
-        "Boolean": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-        "Element": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
-        "Error": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
-        "Function": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-        "HTMLImageElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement",
-        "HTMLVideoElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
-        "HTMLAudioElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement",
-        "HTMLCanvasElement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement",
-        "KeyboardEvent": "https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent",
-        "MouseEvent": "https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent",
-        "Number": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-        "Object": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-        "String": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-        "Touch": "https://developer.mozilla.org/en-US/docs/Web/API/Touch",
-        "TouchEvent": "https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent",
-        "Audio": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",
-        "AudioNode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioNode",
-        "AudioBuffer": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer",
-        "AudioContext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
-        "AudioBufferSourceNode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
-        "Window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
-        "Uint8Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
-        "Uint16Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
-        "Float32Array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+        "undefined": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined",
+        "null": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null",
+        "array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "arraybuffer": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+        "boolean": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+        "element": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+        "error": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+        "function": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+        "htmlimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement",
+        "htmlvideoelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
+        "htmlaudioelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement",
+        "htmlcanvaselement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement",
+        "keyboardevent": "https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent",
+        "mouseevent": "https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent",
+        "number": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+        "object": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+        "string": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+        "touch": "https://developer.mozilla.org/en-US/docs/Web/API/Touch",
+        "touchevent": "https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent",
+        "audio": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",
+        "audionode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioNode",
+        "audiobuffer": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer",
+        "audiocontext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
+        "audiobuffersourcenode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
+        "window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
+        "uint8array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+        "uint16array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+        "float32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
         "*": "#" // blerg
     };
 
-    var isArray = false;
-    var regexArrayPattern = /^Array.<(.*)>$/; // regexp for arrays of types
-    var regexTypeOfPattern = /^Class.<(.*)>$/; // regexp for referencing the class type itself (not the instance)
     var url = null; // URL to link to type
     var name; // name of type
     var display = null; // display name of type
@@ -220,27 +248,15 @@ var typeLink = function (type) {
     if (type.longname) {
         name = type.longname;
     }
-    display = name;
 
-    // Check for array
-    var regexArrayMatch = regexArrayPattern.exec(name);
-    if (regexArrayMatch) {
-        name = regexArrayMatch[1];
-        display = name + "[]";
-        isArray = true;
-    }
-
-    // Check for typeof
-    var regexTypeOfMatch = regexTypeOfPattern.exec(name);
-    if (regexTypeOfMatch) {
-        name = regexTypeOfMatch[1];
-        display = "typeof " + name;
-        if (isArray) display = "(" + display + ")[]";
-    }
+    var unwrapped = unwrapType(name);
+    name = unwrapped.name;
+    display = unwrapped.display;
 
     // Check for builtin type
-    if (builtins[name]) {
-        url = builtins[name];
+    var builtin = builtins[name.toLowerCase()];
+    if (builtin) {
+        url = builtin;
     } else if (name.startsWith("pc.callbacks")) {
         url = "pc.callbacks.html#" + name.substring("pc.callbacks.".length);
     } else {
