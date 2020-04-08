@@ -189,6 +189,16 @@ var unwrapType = function (name, display) {
         name = type.name;
     }
 
+    // Check for key-value (aka dictionary or index signature) types
+    match = /^Object.<string,\s*(.*)>$/i.exec(name);
+    if (match) {
+        name = match[1];
+
+        type = unwrapType(name, display);
+        display = "{ [string]: " + type.display + " }";
+        name = type.name;
+    }
+
     // Check for class reference types (as opposed to class instances)
     match = /^Class.<(.*)>$/i.exec(name);
     if (match) {
