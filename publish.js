@@ -251,6 +251,7 @@ var typeLink = function (type) {
         "int32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
         "uint32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
         "float32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+        "Gamepad": "https://developer.mozilla.org/en-US/docs/Web/API/Gamepad",
         "*": "#" // blerg
     };
 
