@@ -50,7 +50,6 @@ function getClassInfo(data, cls) {
                     // make sure we don't add duplicate properties
                     for (var p = 0; p < cls.properties.length; p++) {
                         if (cls.properties[p].name === i.name) {
-                            //console.log("SKIP> cls.properties: ", i.longname);
                             return;
                         }
                     }
@@ -61,7 +60,6 @@ function getClassInfo(data, cls) {
                 // make sure we don't add duplicate static members
                 for (var p = 0; p < members.length; p++) {
                     if (members[p].name === i.name) {
-                        //console.log("SKIP> static member: ", i.longname);
                         return;
                     }
                 }
