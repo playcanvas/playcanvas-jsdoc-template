@@ -95,6 +95,15 @@ ready(function () {
     mainContent.addEventListener('mousedown', onMainContentClick);
     mainContent.addEventListener('touchdown', onMainContentClick);
 
+    var clearFilter = function () {
+        var els = document.querySelectorAll("nav.sidebar li");
+
+        for (var i = 0; i < els.length; i++) {
+            if (els[i].classList) {
+                els[i].classList.remove("hidden");
+            }
+        }
+    };
 
     var filterNav = function (value) {
         clearFilter();
@@ -110,16 +119,6 @@ ready(function () {
         }
     };
 
-    var clearFilter = function () {
-        var els = document.querySelectorAll("nav.sidebar li");
-
-        for (var i = 0; i < els.length; i++) {
-            if (els[i].classList) {
-                els[i].classList.remove("hidden");
-            }
-        }
-    };
-
     var filter = document.getElementById("filter-input");
     filter.addEventListener("keydown", function (e) {
         filterNav(e.target.value);
@@ -127,15 +126,4 @@ ready(function () {
     filter.addEventListener("keyup", function (e) {
         filterNav(e.target.value);
     });
-
-
-    // // code highlighting
-    // var els = document.querySelectorAll("textarea");
-    // for (var i = 0; i < els.length; i++) {
-    //     CodeMirror(els[i], {
-    //         value: els[i].textContent,
-    //         mode: "javascript",
-    //         readOnly: true
-    //     });
-    // }
 });
