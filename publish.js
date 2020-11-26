@@ -49,13 +49,21 @@ function getClassInfo(data, cls) {
                 } else {
                     // make sure we don't add duplicate properties
                     for (var p = 0; p < cls.properties.length; p++) {
-                        if (cls.properties[p].name === i.name)
+                        if (cls.properties[p].name === i.name) {
                             return;
+                        }
                     }
                 }
 
                 cls.properties.push(i);
             } else if (i.scope === 'static') {
+                // make sure we don't add duplicate static members
+                for (var p = 0; p < members.length; p++) {
+                    if (members[p].name === i.name) {
+                        return;
+                    }
+                }
+
                 members.push(i);
             }
         } else if (i.kind === "function") {
