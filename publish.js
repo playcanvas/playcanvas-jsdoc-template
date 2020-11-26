@@ -1,21 +1,17 @@
-var template = require('jsdoc/template');
 var fs = require('jsdoc/fs');
 var path = require('jsdoc/path');
 var handlebars = require("handlebars");
 var helper = require("jsdoc/util/templateHelper");
-
-// var logger = require('jsdoc/util/logger');
 
 /** @module publish */
 
 /**
  * Generate documentation output.
  *
- * @param {TAFFY} data - A TaffyDB collection representing
+ * @param {object} data - A TaffyDB collection representing
  *                       all the symbols documented in your code.
  * @param {object} opts - An object with options information.
  */
-
 
 // Build an object for a class by collecting, class, methods, events, base class, inherited methods and events
 function getClassInfo(data, cls) {
@@ -41,14 +37,15 @@ function getClassInfo(data, cls) {
     }).get();
 
     // sort into different kinds
-    all.map(function (i) {
+    all.forEach(i => {
+        var p;
         if (i.kind === "member" || i.kind  === "constant") {
             if (i.scope === 'instance') {
                 if (!cls.properties) {
                     cls.properties = [];
                 } else {
                     // make sure we don't add duplicate properties
-                    for (var p = 0; p < cls.properties.length; p++) {
+                    for (p = 0; p < cls.properties.length; p++) {
                         if (cls.properties[p].name === i.name) {
                             return;
                         }
@@ -58,7 +55,7 @@ function getClassInfo(data, cls) {
                 cls.properties.push(i);
             } else if (i.scope === 'static') {
                 // make sure we don't add duplicate static members
-                for (var p = 0; p < members.length; p++) {
+                for (p = 0; p < members.length; p++) {
                     if (members[p].name === i.name) {
                         return;
                     }
@@ -130,7 +127,8 @@ function getClassInfo(data, cls) {
             }).get();
 
             // sort into different kinds
-            all.map(function (doclet) {
+            // eslint-disable-next-line no-loop-func
+            all.forEach(doclet => {
                 if (doclet.kind === "member") {
                     if (doclet.scope === 'instance') {
                         if (!inherited.cls[i].properties) {
@@ -219,9 +217,9 @@ var unwrapType = function (name, display) {
 
     return {
         name: name,
-        display: display || name,
+        display: display || name
     };
-}
+};
 
 // Return an anchor link string from a type
 var typeLink = function (type) {
@@ -297,7 +295,7 @@ var setupTemplates = function (dir) {
     handlebars.registerPartial("method", fs.readFileSync(path.join(dir, "tmpl/method.tmpl"), { encoding: "utf-8" }));
     handlebars.registerPartial("property", fs.readFileSync(path.join(dir, "tmpl/property.tmpl"), { encoding: "utf-8" }));
     handlebars.registerPartial("event", fs.readFileSync(path.join(dir, "tmpl/event.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("typedef", fs.readFileSync(path.join(dir, "tmpl/typedef.tmpl"), {encoding: "utf-8"}));
+    handlebars.registerPartial("typedef", fs.readFileSync(path.join(dir, "tmpl/typedef.tmpl"), { encoding: "utf-8" }));
     handlebars.registerPartial("example", fs.readFileSync(path.join(dir, "tmpl/example.tmpl"), { encoding: "utf-8" }));
     handlebars.registerPartial("analytics", fs.readFileSync(path.join(dir, "tmpl/analytics.tmpl"), { encoding: "utf-8" }));
 
@@ -440,7 +438,6 @@ exports.publish = function (data, opts) {
         // Compile the standard page template
         var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/page.tmpl"), { encoding: "utf8" }), { preventIndent: true });
 
-        var count = 0;
         // Create a page for each class
         classes.forEach(function (cls) {
             // register all the class names as links
@@ -462,7 +459,7 @@ exports.publish = function (data, opts) {
             fs.writeFileSync(outpath, page, "utf8");
         });
 
-        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/frontpage.tmpl"), { encoding: "utf-8" }), { preventIndent: true });
+        tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/frontpage.tmpl"), { encoding: "utf-8" }), { preventIndent: true });
         var frontpage = tmpl({ env: opts.env, classes: classes });
         var outpath = path.join(outdir, "index.html");
         fs.writeFileSync(outpath, frontpage, "utf8");
