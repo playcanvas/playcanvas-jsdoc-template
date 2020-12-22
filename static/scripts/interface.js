@@ -48,12 +48,12 @@ ready(function () {
 
     var onScroll = function (e) {
         // phones
-        // if (window.innerWidth <= 480) {
-        //     nav.style.top = 0;
-        //     return;
-        // }
+        if (window.innerWidth <= 480) {
+            nav.style.top = 0;
+            return;
+        }
 
-        var s = document.body.scrollTop;
+        var s = window.scrollY;
         var headerHeight = headerElement.clientHeight;
         if (s < headerHeight) {
             nav.style.top = (headerHeight - s) + "px";
