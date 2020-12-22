@@ -41,6 +41,7 @@ ready(function () {
 
     // handle scrolling
     var nav = document.querySelector("nav.sidebar");
+    var navContainer = nav.querySelector("ul");
     var navButton = document.querySelector('body > .container > .sidebarToggle');
     var mainContent = document.querySelector('body > .container > main');
     var navStick = false;
