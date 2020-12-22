@@ -126,4 +126,8 @@ ready(function () {
     filter.addEventListener("keyup", function (e) {
         filterNav(e.target.value);
     });
+
+    // scroll to selected section in class list on load
+    var activeSection = navContainer.querySelector('li.active');
+    if (activeSection) navContainer.scroll(0, activeSection.offsetTop);
 });
