@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "sass --no-source-map sass/styles.scss static/styles/styles.css",
-    "lint": "eslint publish.js static/scripts/interface.js",
+    "lint": "eslint publish.js static/scripts/site/*",
     "test": "npm run lint"
   },
   "devDependencies": {

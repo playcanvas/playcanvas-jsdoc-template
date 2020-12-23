@@ -238,8 +238,10 @@ body {
             top: 168px;
             bottom: 0px;
             width: 240px;
+            box-shadow: rgba(0, 0, 0, 0.2) 10px 0px 10px -10px;
 
             > .sidebarFilter {
+                position: relative;
                 margin-top: 8px;
                 background-color: #fff;
 
@@ -248,6 +250,22 @@ body {
                     font-size: 14px;
                     padding: 8px;
                     margin: 0;
+                }
+                > .clear {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 36px;
+                    line-height: 36px;
+                    text-align: center;
+                    font-size: 14px;
+                    cursor: pointer;
+                    user-select: none;
+                    display: none;
+
+                    &.active {
+                        display: block;
+                    }
                 }
             }
             > ul {
@@ -478,11 +496,14 @@ body {
                 transition: left 200ms;
 
                 &.active {
-                    left: 8px;
-
-                    // > .button {
-                    //     display: none;
-                    // }
+                    left: 0;
+                }
+                > .sidebarFilter {
+                    margin-left: 8px;
+                    margin-right: 8px;
+                }
+                > ul {
+                    margin-left: -8px;
                 }
             }
             > main {
@@ -524,6 +545,13 @@ body {
                         bottom: 56px;
                         padding-bottom: 0;
                     }
+                }
+                > .sidebarFilter {
+                    margin-left: 0;
+                    margin-right: 0;
+                }
+                > ul {
+                    margin-left: -16px;
                 }
             }
         }
