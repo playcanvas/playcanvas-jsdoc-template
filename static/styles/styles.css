@@ -181,6 +181,10 @@ body > header > .header-content > .search:focus {
   color: #fff;
 }
 
+code {
+  overflow: auto;
+}
+
 @media (max-width: 1200px) {
   body > header > .header-width {
     width: auto;
