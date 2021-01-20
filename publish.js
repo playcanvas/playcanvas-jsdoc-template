@@ -326,10 +326,10 @@ var setupTemplates = function (dir) {
         // add pc. prefix to API links
         var regex = /href="(\w+)\.html/g;
         var match;
-        while (match = regex.exec(result)) {
+        while ((match = regex.exec(result))) {
             if (match[1] === 'pc') continue;
             result = result.substring(0, match.index) +
-                     `href="pc.${match[1]}.html` + 
+                     `href="pc.${match[1]}.html` +
                      result.substring(match.index + 11 + match[1].length);
             console.log(result);
         }
