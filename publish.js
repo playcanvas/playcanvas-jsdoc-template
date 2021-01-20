@@ -90,7 +90,6 @@ function getClassInfo(data, cls) {
         }
     };
 
-    // console.log(cls.properties)
     // sort members alphabetically
     if (cls.properties) cls.properties.sort(alphaSort);
     members.sort(alphaSort);
@@ -170,13 +169,14 @@ function getClassInfo(data, cls) {
 
 // return the relative URL from a class or class longname
 var clsUrl = function (cls) {
-    if (cls.longname) {
-        // class object
-        return cls.longname + ".html";
+    var name = cls.longname || cls;
+
+    if (name !== 'pc') {
+        name = 'pc.' + name;
     }
 
     // class name
-    return cls + ".html";
+    return name + ".html";
 
 };
 
@@ -257,7 +257,13 @@ var typeLink = function (type) {
         "int32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
         "uint32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
         "float32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
-        "Gamepad": "https://developer.mozilla.org/en-US/docs/Web/API/Gamepad",
+        "gamepad": "https://developer.mozilla.org/en-US/docs/Web/API/Gamepad",
+        "document": "https://developer.mozilla.org/en-US/docs/Web/API/Document",
+        "xmlhttprequest": "https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest",
+        "svgimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/SVGImageElement",
+        "blob": "https://developer.mozilla.org/en-US/docs/Web/API/Blob",
+        "imagedata": "https://developer.mozilla.org/en-US/docs/Web/API/ImageData",
+        "imagebitmap": "https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap",
         "*": "#" // blerg
     };
 
@@ -279,8 +285,8 @@ var typeLink = function (type) {
     var builtin = builtins[name.toLowerCase()];
     if (builtin) {
         url = builtin;
-    } else if (name.startsWith("pc.callbacks")) {
-        url = "pc.callbacks.html#" + name.substring("pc.callbacks.".length);
+    } else if (name.startsWith("callbacks")) {
+        url = "pc.callbacks.html#" + name.substring("callbacks.".length);
     } else {
         url = clsUrl(name);
     }
@@ -315,7 +321,20 @@ var setupTemplates = function (dir) {
 
     // parse a section of text and convert @link tags into links
     handlebars.registerHelper("parse", function (text) {
-        return helper.resolveLinks(text);
+        var result = helper.resolveLinks(text);
+
+        // add pc. prefix to API links
+        var regex = /href="(\w+)\.html/g;
+        var match;
+        while (match = regex.exec(result)) {
+            if (match[1] === 'pc') continue;
+            result = result.substring(0, match.index) +
+                     `href="pc.${match[1]}.html` + 
+                     result.substring(match.index + 11 + match[1].length);
+            console.log(result);
+        }
+
+        return result;
     });
 
     // return a class URL from a class object or class longname
@@ -414,8 +433,16 @@ exports.publish = function (data, opts) {
         var invalidCharsInLink = /#\./g;
 
         data().each(function (doclet) {
+            if (doclet.undocumented) return;
+
             if (registeredLinks[doclet.longname])
                 return;
+
+            // move global scope doclets into the 'pc' namespace
+            if (!doclet.memberof) {
+                doclet.scope = 'static';
+                doclet.memberof = 'pc';
+            }
 
             var link = helper.createLink(doclet);
             // FIX: replace #. with # in links
@@ -443,7 +470,6 @@ exports.publish = function (data, opts) {
             // register all the class names as links
             helper.registerLink(cls.longname, clsUrl(cls));
 
-
             var info = getClassInfo(data, cls);
             var context = {
                 env: opts.env,
@@ -454,7 +480,12 @@ exports.publish = function (data, opts) {
 
             var page = tmpl(context);
 
-            var outpath = path.join(outdir, cls.longname + ".html");
+            var name = cls.longname;
+            if (name !== 'pc') {
+                name = 'pc.' + name;
+            }
+
+            var outpath = path.join(outdir, name + ".html");
             fs.mkPath(outdir);
             fs.writeFileSync(outpath, page, "utf8");
         });
