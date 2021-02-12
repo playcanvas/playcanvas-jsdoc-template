@@ -331,7 +331,6 @@ var setupTemplates = function (dir) {
             result = result.substring(0, match.index) +
                      `href="pc.${match[1]}.html` +
                      result.substring(match.index + 11 + match[1].length);
-            console.log(result);
         }
 
         return result;
