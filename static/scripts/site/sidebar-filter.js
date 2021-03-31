@@ -1,5 +1,5 @@
 function ready(fn) {
-    if (document.readyState !== 'loading'){
+    if (document.readyState !== 'loading') {
         fn();
     } else {
         document.addEventListener('DOMContentLoaded', fn);
@@ -16,16 +16,16 @@ ready(function () {
 
 
     // update browser history when filter is changed
-    let updateHistoryState = function () {
-        let query = { };
+    var updateHistoryState = function () {
+        var query = { };
 
         if (filterHistory === filter) return;
         if (filter) query.filter = filter;
 
         filterHistory = filter;
 
-        let search = (new URLSearchParams(query)).toString();
-        let url = window.location.origin + window.location.pathname;
+        var search = (new URLSearchParams(query)).toString();
+        var url = window.location.origin + window.location.pathname;
 
         if (search) url += '?' + search;
 
