@@ -37,7 +37,7 @@ function getClassInfo(data, cls) {
     }).get();
 
     // sort into different kinds
-    all.forEach(i => {
+    all.forEach((i) => {
         var p;
         if (i.kind === "member" || i.kind  === "constant") {
             if (i.scope === 'instance') {
@@ -127,7 +127,7 @@ function getClassInfo(data, cls) {
 
             // sort into different kinds
             // eslint-disable-next-line no-loop-func
-            all.forEach(doclet => {
+            all.forEach((doclet) => {
                 if (doclet.kind === "member") {
                     if (doclet.scope === 'instance') {
                         if (!inherited.cls[i].properties) {
@@ -387,17 +387,14 @@ var setupTemplates = function (dir) {
 };
 
 var copyStaticFiles = function (dir, outdir, callback) {
-    let fromDir;
-    let staticFiles;
-
     fs.mkPath(outdir);
 
     // copy the template's static files to outdir
-    fromDir = path.join(dir, 'static');
-    staticFiles = fs.ls(fromDir, 3);
+    const fromDir = path.join(dir, 'static');
+    const staticFiles = fs.ls(fromDir, 3);
 
-    staticFiles.forEach(fileName => {
-        const toDir = fs.toDir( fileName.replace(fromDir, outdir) );
+    staticFiles.forEach((fileName) => {
+        const toDir = fs.toDir(fileName.replace(fromDir, outdir));
 
         fs.mkPath(toDir);
         fs.copyFileSync(fileName, toDir);
