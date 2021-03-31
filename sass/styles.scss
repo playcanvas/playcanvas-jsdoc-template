@@ -240,6 +240,7 @@ body {
         > nav.sidebar {
             position: fixed;
             top: 168px;
+            left: 24px;
             bottom: 0px;
             width: 240px;
             box-shadow: rgba(0, 0, 0, 0.2) 10px 0px 10px -10px;
@@ -329,29 +330,41 @@ body {
             }
         }
         > main {
+            @media (max-width: 1200px) {
+                margin: 0 0 0 264px;
+            }
             margin: 0 0 0 240px;
             padding: 16px 0 16px 16px;
-            line-height: 30px;
+            line-height: 24px;
             color: $main-text-color;
 
             &.full-width {
                 width: 100%;
             }
             > h1:first-child {
-                margin-top: 0;
+                margin-top: 0; 
+                padding-top: 38px;
+                padding-bottom: 16px;
+            }
+            > h1 {
+                margin-top: 58px;
             }
             h1, h2, h3, h4, h5 {
                 @include font-bold();
                 margin-bottom: 0px;
             }
             h1 {
-                font-size: 18px;
+                font-size: 36px;
             }
             h2 {
-                font-size: 16px;
+                font-size: 28px;
+                border-bottom: 1px solid lightgrey;
+                margin-bottom: 24px;
+                margin-top: 38px;
+                padding-bottom: 16px;
             }
             h3 {
-                font-size: 14px;
+                font-size: 22px;
             }
             h4 {
                 font-size: 12px;
@@ -360,6 +373,7 @@ body {
                 font-size: 10px;
             }
             a {
+                font-size: 14px;
                 color: $main-link-color;
 
                 &:hover {
@@ -367,6 +381,7 @@ body {
                 }
             }
             p {
+                font-size: 14px;
                 margin: 0;
             }
             hr {
@@ -399,6 +414,9 @@ body {
                     border-top: 1px solid $table-border-color;
                     border-bottom: 1px solid $table-border-color;
                     font-size: 14px;
+                    padding: 8px 0;
+                    vertical-align: text-top;
+                    max-width: 500px;
                 }
             }
             pre {
@@ -421,14 +439,16 @@ body {
             .readonly {
                 @include font-bold();
                 margin-left: 5px;
-                // font-size: 14px;
+                font-size: 14px;
             }
             .extends {
                 font-style: italic;
                 font-size: 12px;
+                margin-top: -10px;
+                margin-bottom: 16px;
             }
             .methodname {
-                font-size: 16px;
+                font-size: 22px;
             }
             .property {
                 @include font-bold();
