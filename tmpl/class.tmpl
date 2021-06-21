@@ -173,10 +173,12 @@
     {{/if}}
 
     {{#if cls._class}}
+    {{#unless cls.hideconstructor}}
     <h2>Constructor</h2>
     <!-- Constructor -->
     {{> method obj=cls}}
-    {{/if}}
+    {{/unless}}
+    {{/if}}`
 
     <!--properties-->
     {{#if cls.properties}}
