@@ -29,9 +29,9 @@
     "test": "npm run lint"
   },
   "devDependencies": {
-    "@playcanvas/eslint-config": "^1.0.8",
-    "eslint": "^7.23.0",
-    "sass": "^1.32.8",
+    "@playcanvas/eslint-config": "^1.0.10",
+    "eslint": "^8.1.0",
+    "sass": "^1.43.3",
     "taffydb": "^2.7.3"
   },
   "dependencies": {
