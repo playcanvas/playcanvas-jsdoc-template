@@ -42,7 +42,7 @@ ready(function () {
         if (scrollY < headerHeight) {
             elementContainer.style.top = (headerHeight - scrollY) + 'px';
             sticky = false;
-        } else if (! sticky) {
+        } else if (!sticky) {
             elementContainer.style.top = 0;
             sticky = true;
         }

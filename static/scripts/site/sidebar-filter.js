@@ -37,7 +37,7 @@ ready(function () {
 
     // hide/show elements based on filter
     var filterElements = function (value, force) {
-        if (filter === value && ! force)
+        if (filter === value && !force)
             return;
 
         filter = value;
@@ -59,7 +59,7 @@ ready(function () {
 
 
     var onClearFilter = function () {
-        if (! filter) return;
+        if (!filter) return;
         elementInput.value = '';
         filterElements('');
         updateHistoryState();
