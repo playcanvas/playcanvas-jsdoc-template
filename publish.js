@@ -322,17 +322,18 @@ var setupTemplates = function (dir) {
     // parse a section of text and convert @link tags into links
     handlebars.registerHelper("parse", function (text) {
         var result = helper.resolveLinks(text);
-
-        // add pc. prefix to API links
-        var regex = /href="(\w+)\.html/g;
-        var match;
-        while ((match = regex.exec(result))) {
-            if (match[1] === 'pc') continue;
-            result = result.substring(0, match.index) +
-                     `href="pc.${match[1]}.html` +
-                     result.substring(match.index + 11 + match[1].length);
-        }
-
+        // Add pc. prefix to API links.
+        var keepPC = ['createScript', 'drawFullscreenQuad', 'createMesh', 'registerScript'];
+        //                    (filename) (hash2)   (display+ddddddddddddddd)(hash2)
+        var regex = /<a href="(\w+)\.html(#\w+)?\">(([A-Za-z]+[a-z0-9\.]+)+)(#\w+)?<\/a>/g;
+        result = result.replace(regex, function(all, filename, hash1, display, d, hash2) {
+            if (filename == 'pc' && !keepPC.includes(display)) {
+                filename = display;
+            }
+            var ret = `<a href="pc.${filename}.html${hash1||''}">${display}${hash2||''}</a>`;
+            ret = ret.replace(/pc\.pc\./g, 'pc.');
+            return ret;
+        });
         return result;
     });
 
