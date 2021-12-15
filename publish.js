@@ -326,11 +326,11 @@ var setupTemplates = function (dir) {
         var keepPC = ['createScript', 'drawFullscreenQuad', 'createMesh', 'registerScript'];
         //                    (filename) (hash2)   (display+ddddddddddddddd)(hash2)
         var regex = /<a href="(\w+)\.html(#\w+)?\">(([A-Za-z]+[a-z0-9\.]+)+)(#\w+)?<\/a>/g;
-        result = result.replace(regex, function(all, filename, hash1, display, d, hash2) {
+        result = result.replace(regex, function (all, filename, hash1 = '', display, d, hash2 = '') {
             if (filename == 'pc' && !keepPC.includes(display)) {
                 filename = display;
             }
-            var ret = `<a href="pc.${filename}.html${hash1||''}">${display}${hash2||''}</a>`;
+            var ret = `<a href="pc.${filename}.html${hash1}">${display}${hash2}</a>`;
             ret = ret.replace(/pc\.pc\./g, 'pc.');
             return ret;
         });
