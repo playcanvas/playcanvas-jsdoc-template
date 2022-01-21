@@ -1,4 +1,3 @@
-@charset "UTF-8";
 @font-face {
   font-family: "ui-font-solid";
   src: url("https://playcanvas.com/static-assets/fonts/uifont-solid.eot");
@@ -307,7 +306,7 @@ body > .container > nav.sidebar > ul > li {
   padding: 0;
 }
 body > .container > nav.sidebar > ul > li:hover:before, body > .container > nav.sidebar > ul > li.active:before {
-  content: "";
+  content: "\e113";
   position: absolute;
   left: -20px;
   width: 16px;
@@ -527,7 +526,7 @@ body > .container > main .property {
     text-align: center;
   }
   body > .container > .sidebarToggle > span:before {
-    content: "";
+    content: "\e186";
   }
   body > .container > nav.sidebar {
     left: -240px;
@@ -560,7 +559,7 @@ body > .container > main .property {
     left: 0;
   }
   body > .container > .sidebarToggle.active > span:before {
-    content: "";
+    content: "\e436";
   }
   body > .container > nav.sidebar.active {
     width: calc(100% - 16px);
