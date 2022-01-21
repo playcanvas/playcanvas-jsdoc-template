@@ -1,7 +1,8 @@
-var fs = require('jsdoc/fs');
-var path = require('jsdoc/path');
-var handlebars = require("handlebars");
-var helper = require("jsdoc/util/templateHelper");
+const fs = require('jsdoc/fs');
+const helper = require('jsdoc/util/templateHelper');
+const path = require('jsdoc/path');
+
+const handlebars = require("handlebars");
 
 /** @module publish */
 
@@ -414,9 +415,16 @@ var setup = function (opts, callback) {
     });
 };
 
-exports.publish = function (data, opts) {
-    var outdir = path.join(env.pwd, opts.destination);
+/**
+ * @param {TAFFY} taffyData - See <http://taffydb.com/>.
+ * @param {object} opts - Options object.
+ * @param {Tutorial} tutorials - Tutorials data.
+ */
+exports.publish = (taffyData, opts, tutorials) => {
+    var outdir = path.join(env.pwd, opts.destination); /* eslint-disable-line no-undef */
     var tmpldir = opts.template;
+
+    let data = taffyData;
 
     setup({
         tmpldir: tmpldir,
@@ -428,9 +436,9 @@ exports.publish = function (data, opts) {
 
         var invalidCharsInLink = /#\./g;
 
-        data().each(function (doclet) {
-            if (doclet.undocumented) return;
+        data = helper.prune(data);
 
+        data().each((doclet) => {
             if (registeredLinks[doclet.longname])
                 return;
 
