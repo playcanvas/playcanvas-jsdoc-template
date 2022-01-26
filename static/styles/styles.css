@@ -127,7 +127,7 @@ body > header > nav > ul > li.active > a, body > header > nav > ul > li:hover > 
 body > header > nav > ul > li > a {
   line-height: 48px;
   float: left;
-  padding: 0 32px;
+  padding: 0 10px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.75);
 }
