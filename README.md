@@ -16,7 +16,7 @@ To test static html files, you need to use PlayCanvas Engine repository. Clone h
     ./playcanvas-jsdoc-template/
     ./engine/
 
-Then edit `./engine/conf-api.json`, field `opts.template` to: `"../api-reference"` so it will use your local copy of templates for building the docs, and then in `./engine/` run:
+Then edit `./engine/conf-api.json`, field `opts.template` to: `"../playcanvas-jsdoc-template"` so it will use your local copy of templates for building the docs, and then in `./engine/` run:
 
     npm run docs
 
