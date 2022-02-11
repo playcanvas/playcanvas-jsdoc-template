@@ -197,9 +197,9 @@ var unwrapType = function (name, display) {
     }
 
     // Check for key-value (aka dictionary or index signature) types
-    match = /^Object.<string,\s*(.*)>$/i.exec(name);
+    match = /^(Object|Record).<string,\s*(.*)>$/i.exec(name);
     if (match) {
-        name = match[1];
+        name = match[2];
 
         type = unwrapType(name, display);
         display = "{ [string]: " + type.display + " }";
