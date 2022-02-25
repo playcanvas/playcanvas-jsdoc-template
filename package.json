@@ -39,10 +39,8 @@
   "devDependencies": {
     "@playcanvas/eslint-config": "^1.0.16",
     "eslint": "^8.9.0",
+    "handlebars": "^4.7.7",
     "sass": "^1.49.9",
     "taffydb": "^2.7.3"
-  },
-  "dependencies": {
-    "handlebars": "^4.7.7"
   }
 }
