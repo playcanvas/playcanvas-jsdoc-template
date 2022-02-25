@@ -265,6 +265,7 @@ var typeLink = function (type) {
         "blob": "https://developer.mozilla.org/en-US/docs/Web/API/Blob",
         "imagedata": "https://developer.mozilla.org/en-US/docs/Web/API/ImageData",
         "imagebitmap": "https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap",
+        "this": "https://www.typescriptlang.org/docs/handbook/advanced-types.html#polymorphic-this-types",
         "*": "#" // blerg
     };
 
