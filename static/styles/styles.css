@@ -136,7 +136,7 @@ body > header > .header-content {
   padding: 20px 0px;
 }
 body > header > .header-content > h1 {
-  color: white;
+  color: rgb(255, 255, 255);
   font-size: 24px;
   float: left;
 }
@@ -174,7 +174,7 @@ body > header > .header-content > .search::input-placeholder {
 }
 body > header > .header-content > .search:focus, body > header > .header-content > .search:hover {
   outline: 0;
-  border-color: white;
+  border-color: rgb(255, 255, 255);
 }
 body > header > .header-content > .search:focus {
   color: #fff;
