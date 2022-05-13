@@ -39,14 +39,21 @@ function getClassInfo(data, cls) {
 
     // sort into different kinds
     all.forEach((i) => {
-        var p;
         if (i.kind === "member" || i.kind  === "constant") {
+            // Workaround for the following JSDoc issue:
+            //   https://github.com/jsdoc/jsdoc/issues/1427
+            // We know that any PlayCanvas class property that is uppercase should
+            // be static regardless of what scope is set to.
+            if (i.scope === 'instance' && i.name === i.name.toUpperCase()) {
+                i.scope = 'static';
+            }
+
             if (i.scope === 'instance') {
                 if (!cls.properties) {
                     cls.properties = [];
                 } else {
                     // make sure we don't add duplicate properties
-                    for (p = 0; p < cls.properties.length; p++) {
+                    for (let p = 0; p < cls.properties.length; p++) {
                         if (cls.properties[p].name === i.name) {
                             return;
                         }
@@ -56,7 +63,7 @@ function getClassInfo(data, cls) {
                 cls.properties.push(i);
             } else if (i.scope === 'static') {
                 // make sure we don't add duplicate static members
-                for (p = 0; p < members.length; p++) {
+                for (let p = 0; p < members.length; p++) {
                     if (members[p].name === i.name) {
                         return;
                     }
@@ -222,95 +229,90 @@ var unwrapType = function (name, display) {
     };
 };
 
+// External type links
+const builtins = {
+    "undefined": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined",
+    "null": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null",
+    "array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "arraybuffer": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "boolean": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "element": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "error": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "function": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "htmlimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement",
+    "htmlvideoelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
+    "htmlaudioelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement",
+    "htmlcanvaselement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement",
+    "keyboardevent": "https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent",
+    "mouseevent": "https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent",
+    "number": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "object": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "string": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "touch": "https://developer.mozilla.org/en-US/docs/Web/API/Touch",
+    "touchevent": "https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent",
+    "audio": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",
+    "audionode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioNode",
+    "audiobuffer": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer",
+    "audiocontext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
+    "audiobuffersourcenode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
+    "window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
+    "int8array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "uint8array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "uint8clampedarray": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "int16array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "uint16array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "int32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "uint32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "float32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "gamepad": "https://developer.mozilla.org/en-US/docs/Web/API/Gamepad",
+    "document": "https://developer.mozilla.org/en-US/docs/Web/API/Document",
+    "xmlhttprequest": "https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest",
+    "svgimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/SVGImageElement",
+    "blob": "https://developer.mozilla.org/en-US/docs/Web/API/Blob",
+    "imagedata": "https://developer.mozilla.org/en-US/docs/Web/API/ImageData",
+    "imagebitmap": "https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap",
+    "this": "https://www.typescriptlang.org/docs/handbook/advanced-types.html#polymorphic-this-types",
+    "*": "#" // blerg
+};
+
 // Return an anchor link string from a type
-var typeLink = function (type) {
-    var builtins = {
-        "undefined": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Undefined",
-        "null": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Null",
-        "array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
-        "arraybuffer": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
-        "boolean": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
-        "element": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
-        "error": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
-        "function": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
-        "htmlimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement",
-        "htmlvideoelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
-        "htmlaudioelement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement",
-        "htmlcanvaselement": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement",
-        "keyboardevent": "https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent",
-        "mouseevent": "https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent",
-        "number": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
-        "object": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
-        "string": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
-        "touch": "https://developer.mozilla.org/en-US/docs/Web/API/Touch",
-        "touchevent": "https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent",
-        "audio": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio",
-        "audionode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioNode",
-        "audiobuffer": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer",
-        "audiocontext": "https://developer.mozilla.org/en-US/docs/Web/API/AudioContext",
-        "audiobuffersourcenode": "https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode",
-        "window": "https://developer.mozilla.org/en-US/docs/Web/API/Window",
-        "int8array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
-        "uint8array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
-        "uint8clampedarray": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
-        "int16array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
-        "uint16array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
-        "int32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
-        "uint32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
-        "float32array": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
-        "gamepad": "https://developer.mozilla.org/en-US/docs/Web/API/Gamepad",
-        "document": "https://developer.mozilla.org/en-US/docs/Web/API/Document",
-        "xmlhttprequest": "https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest",
-        "svgimageelement": "https://developer.mozilla.org/en-US/docs/Web/API/SVGImageElement",
-        "blob": "https://developer.mozilla.org/en-US/docs/Web/API/Blob",
-        "imagedata": "https://developer.mozilla.org/en-US/docs/Web/API/ImageData",
-        "imagebitmap": "https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap",
-        "this": "https://www.typescriptlang.org/docs/handbook/advanced-types.html#polymorphic-this-types",
-        "*": "#" // blerg
-    };
-
-    var url = null; // URL to link to type
-    var name; // name of type
-    var display = null; // display name of type
-
+const typeLink = (type) => {
     // Get the name from string or type object
-    name = type;
+    let typeName = type;
     if (type.longname) {
-        name = type.longname;
+        typeName = type.longname;
     }
 
-    var unwrapped = unwrapType(name);
-    name = unwrapped.name;
-    display = unwrapped.display;
+    const unwrapped = unwrapType(typeName);
+    const name = unwrapped.name;
+    const display = unwrapped.display;
 
     // Check for builtin type
-    var builtin = builtins[name.toLowerCase()];
+    let url;
+    const builtin = builtins[name.toLowerCase()];
     if (builtin) {
         url = builtin;
-    } else if (name.startsWith("callbacks")) {
-        url = "pc.callbacks.html#" + name.substring("callbacks.".length);
+    } else if (name.endsWith('Callback')) {
+        url = `pc.html#${name}`;
     } else {
         url = clsUrl(name);
     }
 
-    return '<a href="' + url + '">' + display + '</a>';
+    return `<a href="${url}">${display}</a>`;
 };
 
-var setupTemplates = function (dir) {
-    handlebars.registerPartial("header", fs.readFileSync(path.join(dir, "tmpl/header.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("navigation", fs.readFileSync(path.join(dir, "tmpl/nav.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("class", fs.readFileSync(path.join(dir, "tmpl/class.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("method", fs.readFileSync(path.join(dir, "tmpl/method.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("property", fs.readFileSync(path.join(dir, "tmpl/property.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("event", fs.readFileSync(path.join(dir, "tmpl/event.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("typedef", fs.readFileSync(path.join(dir, "tmpl/typedef.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("example", fs.readFileSync(path.join(dir, "tmpl/example.tmpl"), { encoding: "utf-8" }));
-    handlebars.registerPartial("analytics", fs.readFileSync(path.join(dir, "tmpl/analytics.tmpl"), { encoding: "utf-8" }));
+const setupTemplates = (dir) => {
+    const partials = ['analytics', 'class', 'event', 'example', 'header', 'method', 'navigation', 'property', 'typedef'];
+    partials.forEach((partialName) => {
+        const partialPath = path.join(dir, 'tmpl', `${partialName}.hbs`);
+        const partial = fs.readFileSync(partialPath, { encoding: 'utf8' });
+        handlebars.registerPartial(partialName, partial);
+    });
 
-    handlebars.registerHelper("excerpt", function (text) {
+    handlebars.registerHelper('excerpt', function (text) {
         // return the first characters of the string up to and including the first period (.) not inside curly braces
         if (text) {
-            var n = text.search(/\.(?![^{]*})/);
+            const n = text.search(/\.(?![^{]*})/);
             if (n > 0) {
                 return text.slice(0, n + 1);
             }
@@ -322,12 +324,12 @@ var setupTemplates = function (dir) {
     });
 
     // parse a section of text and convert @link tags into links
-    handlebars.registerHelper("parse", function (text) {
-        var result = helper.resolveLinks(text);
+    handlebars.registerHelper('parse', function (text) {
+        let result = helper.resolveLinks(text);
 
         // add pc. prefix to API links
-        var regex = /href="(\w+)\.html/g;
-        var match;
+        const regex = /href="(\w+)\.html/g;
+        let match;
         while ((match = regex.exec(result))) {
             if (match[1] === 'pc') continue;
             result = result.substring(0, match.index) +
@@ -339,53 +341,54 @@ var setupTemplates = function (dir) {
     });
 
     // return a class URL from a class object or class longname
-    handlebars.registerHelper("clsurl", function (cls) {
+    handlebars.registerHelper('clsurl', function (cls) {
         return clsUrl(cls);
     });
 
-    handlebars.registerHelper("readonly", function (prop) {
-        if (prop.readonly) {
-            return "<span class='readonly'>[read only]</span>";
-        }
-
-        return "";
+    handlebars.registerHelper('readonly', function (prop) {
+        return prop.readonly ? '<span class="readonly">[read only]</span>' : '';
     });
 
     // return a string with the method signature. e.g. (parama, paramb)
-    handlebars.registerHelper("methodsig", function (method) {
-        var sig = "(";
+    handlebars.registerHelper('methodsig', function (method) {
+        let sig = '(';
 
         if (method.params) {
-            for (var i = 0; i < method.params.length; i++) {
-                if (method.params[i].name.indexOf(".") < 0) { // skip object param documentation
-                    if (i !== 0) sig += ", ";
-                    var name = method.params[i].name;
+            for (let i = 0; i < method.params.length; i++) {
+                if (method.params[i].name.indexOf('.') < 0) { // skip object param documentation
+                    if (i !== 0) sig += ', ';
+                    let name = method.params[i].name;
                     if (method.params[i].optional) {
-                        name = "[" + name + "]";
+                        name = `[${name}]`;
                     }
                     sig += name;
                 }
             }
         }
 
-        return sig + ")";
+        return sig + ')';
     });
 
     // return a link "<a>" for the set of types from a method/property/param
-    handlebars.registerHelper("type-link", function (types) {
+    handlebars.registerHelper('type-link', function (types) {
         try {
-            var result = "";
+            var result = '';
             for (var i = 0; i < types.names.length; i++) {
-                if (i !== 0) result += ", ";
+                if (i !== 0) result += ', ';
                 result += typeLink(types.names[i]);
             }
 
             return result;
         } catch (e) {
             console.error("Can't generate type link. Search output for {{TYPE-ERROR}}");
-            return "{{TYPE-ERROR}}";
+            return '{{TYPE-ERROR}}';
         }
     });
+};
+
+const loadTemplate = (path) => {
+    const templateSrc = fs.readFileSync(path, { encoding: "utf-8" });
+    return handlebars.compile(templateSrc, { preventIndent: true });
 };
 
 var copyStaticFiles = function (dir, outdir, callback) {
@@ -439,6 +442,11 @@ exports.publish = (taffyData, opts, tutorials) => {
 
         data = helper.prune(data);
 
+        // Strip all typedefs that are not callbacks
+        data(function () {
+            return this.kind === 'typedef' && !this.name.endsWith('Callback');
+        }).remove();
+
         data().each((doclet) => {
             if (registeredLinks[doclet.longname])
                 return;
@@ -449,7 +457,7 @@ exports.publish = (taffyData, opts, tutorials) => {
                 doclet.memberof = 'pc';
             }
 
-            var link = helper.createLink(doclet);
+            let link = helper.createLink(doclet);
             // FIX: replace #. with # in links
             link = link.replace(invalidCharsInLink, '#');
 
@@ -458,46 +466,49 @@ exports.publish = (taffyData, opts, tutorials) => {
         });
 
         // Query for list of all classes
-        var classes = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
-        var modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
+        let classes = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
+        const modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
 
         classes = modules.concat(classes);
-        classes.forEach(function (cls) {
+        classes.forEach((cls) => {
             cls._class = (cls.kind === "class" || cls.kind === "interface");
             cls._namespace = (cls.kind === "namespace");
         });
 
         // Compile the standard page template
-        var tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/page.tmpl"), { encoding: "utf8" }), { preventIndent: true });
+        let templatePath = path.join(tmpldir, 'tmpl', 'page.hbs');
+        let template = loadTemplate(templatePath);
 
         // Create a page for each class
-        classes.forEach(function (cls) {
+        classes.forEach((cls) => {
             // register all the class names as links
             helper.registerLink(cls.longname, clsUrl(cls));
 
-            var info = getClassInfo(data, cls);
-            var context = {
+            const info = getClassInfo(data, cls);
+
+            const html = template({
                 env: opts.env,
                 classes: classes,
                 cls: info,
                 title: cls.longname
-            };
+            });
 
-            var page = tmpl(context);
-
-            var name = cls.longname;
+            let name = cls.longname;
             if (name !== 'pc') {
                 name = 'pc.' + name;
             }
 
-            var outpath = path.join(outdir, name + ".html");
-            fs.mkPath(outdir);
-            fs.writeFileSync(outpath, page, "utf8");
+            const outpath = path.join(outdir, name + '.html');
+            fs.writeFileSync(outpath, html, 'utf8');
         });
 
-        tmpl = handlebars.compile(fs.readFileSync(path.join(tmpldir, "tmpl/frontpage.tmpl"), { encoding: "utf-8" }), { preventIndent: true });
-        var frontpage = tmpl({ env: opts.env, classes: classes });
-        var outpath = path.join(outdir, "index.html");
-        fs.writeFileSync(outpath, frontpage, "utf8");
+        templatePath = path.join(tmpldir, 'tmpl', 'frontpage.hbs');
+        template = loadTemplate(templatePath);
+        const html = template({
+            env: opts.env,
+            classes: classes
+        });
+        const outpath = path.join(outdir, 'index.html');
+        fs.writeFileSync(outpath, html, 'utf8');
     });
 };
