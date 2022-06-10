@@ -396,6 +396,9 @@ body > .container > main p {
   font-size: 14px;
   margin: 0;
 }
+body > .container > main ul {
+  font-size: 14px;
+}
 body > .container > main hr {
   border: 1px solid #F0F0F0;
   margin-top: 20px;

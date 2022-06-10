@@ -1,6 +1,6 @@
 {
   "name": "@playcanvas/jsdoc-template",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "JSDoc 3 template for PlayCanvas",
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://playcanvas.com",
@@ -38,8 +38,8 @@
   ],
   "devDependencies": {
     "@playcanvas/eslint-config": "^1.1.1",
-    "eslint": "^8.15.0",
-    "sass": "^1.51.0",
+    "eslint": "^8.17.0",
+    "sass": "^1.52.3",
     "taffydb": "^2.7.3"
   },
   "dependencies": {
