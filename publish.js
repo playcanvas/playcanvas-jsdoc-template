@@ -179,13 +179,17 @@ function getClassInfo(data, cls) {
 var clsUrl = function (cls) {
     var name = cls.longname || cls;
 
+    // This should catch any string literals that do no need to be hyperlinked
+    if (name.includes('"')) {
+        return null;
+    }
+
     if (name !== 'pc') {
         name = 'pc.' + name;
     }
 
     // class name
     return name + ".html";
-
 };
 
 // Recursively unwrap type (if array or class reference)
@@ -298,7 +302,7 @@ const typeLink = (type) => {
         url = clsUrl(name);
     }
 
-    return `<a href="${url}">${display}</a>`;
+    return url ? `<a href="${url}">${display}</a>` : display;
 };
 
 const setupTemplates = (dir) => {
