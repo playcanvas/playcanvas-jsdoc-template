@@ -145,7 +145,7 @@ function getClassInfo(data, cls) {
                         }
 
                         // Making sure there is no existing property with that name.
-                        if (!inherited.cls[i].properties.find((d) => doclet.name === d.name)) {
+                        if (!inherited.cls[i].properties.find(d => doclet.name === d.name)) {
                             inherited.cls[i].properties.push(doclet);
                         }
                     } else if (doclet.scope === 'static') {
@@ -162,7 +162,7 @@ function getClassInfo(data, cls) {
                 }
 
                 // Making sure there is no doclet of that name within the same kind.
-                if (kind && inherited[kind] && !inherited[kind].find((d) => doclet.name === d.name)) {
+                if (kind && inherited[kind] && !inherited[kind].find(d => doclet.name === d.name)) {
                     inherited[kind].push(doclet);
                 }
             });
