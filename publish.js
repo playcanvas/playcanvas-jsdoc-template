@@ -172,6 +172,10 @@ function getClassInfo(data, cls) {
             inherited.methods.sort(alphaSort);
             inherited.staticMethods.sort(alphaSort);
             inherited.events.sort(alphaSort);
+
+            if (inherited.cls[i].properties) {
+                inherited.cls[i].properties.sort(alphaSort);
+            }
         }
     }
 
