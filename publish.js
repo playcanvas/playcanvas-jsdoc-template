@@ -136,23 +136,34 @@ function getClassInfo(data, cls) {
             // sort into different kinds
             // eslint-disable-next-line no-loop-func
             all.forEach((doclet) => {
+                let kind;
+
                 if (doclet.kind === "member") {
                     if (doclet.scope === 'instance') {
                         if (!inherited.cls[i].properties) {
                             inherited.cls[i].properties = [];
                         }
-                        inherited.cls[i].properties.push(doclet);
+
+                        // Making sure there is no existing property with that name.
+                        if (!inherited.cls[i].properties.find((d) => doclet.name === d.name)) {
+                            inherited.cls[i].properties.push(doclet);
+                        }
                     } else if (doclet.scope === 'static') {
-                        inherited.members.push(doclet);
+                        kind = 'members';
                     }
                 } else if (doclet.kind === "function") {
                     if (doclet.scope === 'instance') {
-                        inherited.methods.push(doclet);
+                        kind = 'methods';
                     } else if (doclet.scope === 'static') {
-                        inherited.staticMethods.push(doclet);
+                        kind = 'staticMethods';
                     }
                 } else if (doclet.kind === "event") {
-                    inherited.events.push(doclet);
+                    kind = 'events';
+                }
+
+                // Making sure there is no doclet of that name within the same kind.
+                if (kind && inherited[kind] && !inherited[kind].find((d) => doclet.name === d.name)) {
+                    inherited[kind].push(doclet);
                 }
             });
 
