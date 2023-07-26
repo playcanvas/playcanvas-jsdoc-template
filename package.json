@@ -1,7 +1,7 @@
 {
   "name": "@playcanvas/jsdoc-template",
   "version": "1.0.29",
-  "description": "JSDoc 3 template for PlayCanvas",
+  "description": "JSDoc 3.x and 4.x compatible template for PlayCanvas",
   "author": "PlayCanvas <support@playcanvas.com>",
   "homepage": "https://playcanvas.com",
   "keywords": [
