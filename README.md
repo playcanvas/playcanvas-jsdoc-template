@@ -1,5 +1,5 @@
 # PlayCanvas JSDoc Template
-This is a JSDoc 3 template for the PlayCanvas API Reference. It is generated automatically during engine publishing process and hosted on: https://developer.playcanvas.com/api/
+This is a JSDoc 3.x and 4.x compatible template for the PlayCanvas API Reference. It is generated automatically during engine publishing process and hosted on: https://developer.playcanvas.com/api/
 
 ## How to build
 
