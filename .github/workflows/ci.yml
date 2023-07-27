@@ -4,6 +4,8 @@
 # For more information see: 
 # https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
+# Note: "jq" is installed by default on github runners
+
 name: CI
 
 on:
@@ -57,3 +59,76 @@ jobs:
 
     - name: Run ESLint
       run: npm run lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout template code
+        uses: actions/checkout@v3
+        with:
+          repository: playcanvas/playcanvas-jsdoc-template
+          path: ./playcanvas-jsdoc-template
+
+      - name: Checkout engine code
+        uses: actions/checkout@v3
+        with:
+          repository: playcanvas/engine
+          path: ./engine
+
+      - name: Show working directory with both repos
+        run: ls -al
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install updated template dependencies
+        run: npm ci
+        working-directory: ./playcanvas-jsdoc-template
+
+      - name: Build updated template
+        run: npm run build
+        working-directory: ./playcanvas-jsdoc-template
+        
+      - name: Install engine dependencies
+        run: npm ci
+        working-directory: ./engine
+
+      - name: Read origional conf-api.json
+        run: cat ./conf-api.json
+        working-directory: ./engine
+
+      - name: Confirm current template works
+        run: npm run docs
+        working-directory: ./engine
+
+      - name: Show docs directory
+        run: ls ./docs/
+        working-directory: ./engine
+
+      - name: Clear docs directory
+        run: rm -rf ./docs/
+        working-directory: ./engine
+
+      - name: Rename original config file
+        run: mv conf-api.json conf-api.orig
+        working-directory: ./engine
+
+      - name: Point engine conf-api.json to updated template
+        run: jq '.opts.template=$tmpl' --arg tmpl "../playcanvas-jsdoc-template" conf-api.orig > conf-api.json
+        working-directory: ./engine
+
+      - name: Read modified conf-api.json
+        run: cat ./conf-api.json
+        working-directory: ./engine
+
+      - name: Build PlayCanvas API Reference with updated template
+        run: npm run docs
+        working-directory: ./engine
+
+      - name: Show docs directory
+        run: ls ./docs/
+        working-directory: ./engine
