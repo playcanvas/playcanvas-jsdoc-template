@@ -9,8 +9,7 @@ const handlebars = require("handlebars");
 /**
  * Generate documentation output.
  *
- * @param {object} data - A TaffyDB collection representing
- *                       all the symbols documented in your code.
+ * @param {object} data - A TaffyDB collection representing all the symbols documented in your code.
  * @param {object} opts - An object with options information.
  */
 
