@@ -40,7 +40,7 @@ const localeAlphaSort = function (a, b) {
 };
 
 // EP: Uncomment this line and comment out the alphaSort definition above
-// to correct the documentation to use proper alphabetical order.  At this 
+// to correct the documentation to use proper alphabetical order.  At this
 // time we want to generate the exact same output.  Use WinMerge to compare
 // the old and new documentation sets to see the few files this corrects.
 
