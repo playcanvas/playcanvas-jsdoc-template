@@ -4,6 +4,49 @@ const path = require('jsdoc/path');
 
 const handlebars = require("handlebars");
 
+
+// EP: Used for now to ensure same output is produced.
+// This origional fuction will put CAPITOL letters first
+// it does not ignore case, correctly sort diacritics, special symbols
+
+const alphaSort = function (a, b) {
+    if (a.longname && b.longname) {
+        if (a.longname < b.longname) return -1;
+        if (a.longname > b.longname) return 1;
+        return 0;
+    }
+
+    if (a.name && b.name) {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+    }
+
+    return 0;
+};
+
+// Replacement
+
+const localeAlphaSort = function (a, b) {
+    if (a.longname && b.longname) {
+        return a.longname.localeCompare(b.longname);
+    }
+
+    if (a.name && b.name) {
+        return a.name.localeCompare(b.name);
+    }
+
+    return 0;
+};
+
+// EP: Uncomment this line and comment out the alphaSort definition above
+// to correct the documentation to use proper alphabetical order.  At this
+// time we want to generate the exact same output.  Use WinMerge to compare
+// the old and new documentation sets to see the few files this corrects.
+
+// const alphaSort = localeAlphaSort;
+
+
 /** @module publish */
 
 /**
@@ -83,20 +126,6 @@ function getClassInfo(data, cls) {
         }
     });
 
-    var alphaSort = function (a, b) {
-        if (a.longname && b.longname) {
-            if (a.longname < b.longname) return -1;
-            if (a.longname > b.longname) return 1;
-            return 0;
-        }
-
-        if (a.name && b.name) {
-            if (a.name < b.name) return -1;
-            if (a.name > b.name) return 1;
-            return 0;
-        }
-    };
-
     // sort members alphabetically
     if (cls.properties) cls.properties.sort(alphaSort);
     members.sort(alphaSort);
@@ -118,7 +147,8 @@ function getClassInfo(data, cls) {
         for (var i = 0; i < cls.augments.length; i++) {
             var base = cls.augments[i];
 
-            inherited.cls.push(data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).first());
+            const queryItems = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true }, "longname": base }).get();
+            inherited.cls.push(queryItems[0]);
 
             all = data({
                 kind: ["member", "function", "event"],
@@ -484,8 +514,12 @@ exports.publish = (taffyData, opts, tutorials) => {
         });
 
         // Query for list of all classes
-        let classes = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
-        const modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).order("longname").get();
+        let classes = data({ kind: ["class", "interface"], access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).get();
+        const modules = data({ kind: "namespace", access: { "isUndefined": true }, undocumented: { "isUndefined": true } }).get();
+
+        // Locale aware sort like taffydata.order
+        classes.sort(localeAlphaSort);
+        modules.sort(localeAlphaSort);
 
         classes = modules.concat(classes);
         classes.forEach((cls) => {
