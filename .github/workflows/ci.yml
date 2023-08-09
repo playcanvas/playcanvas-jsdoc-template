@@ -25,47 +25,65 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     timeout-minutes: 10
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Node.js 18.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install
       run: npm ci
 
-    - name: Build PlayCanvas
+    - name: Build
       run: npm run build
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
+
     timeout-minutes: 10
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Node.js 18.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install
       run: npm ci
 
-    - name: Run ESLint
+    - name: Lint
       run: npm run lint
 
   test:
     name: Test
     runs-on: ubuntu-latest
+
     timeout-minutes: 10
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
       - name: Checkout template code
         uses: actions/checkout@v3
@@ -82,10 +100,10 @@ jobs:
       - name: Show working directory with both repos
         run: ls -al
 
-      - name: Setup Node.js 18.x
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Install updated template dependencies
         run: npm ci
