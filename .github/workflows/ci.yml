@@ -43,7 +43,7 @@ jobs:
         cache: 'npm'
 
     - name: Install
-      run: npm ci
+      run: npm clean-install --progress=false --no-fund
 
     - name: Build
       run: npm run build
@@ -69,7 +69,7 @@ jobs:
         cache: 'npm'
 
     - name: Install
-      run: npm ci
+      run: npm clean-install --progress=false --no-fund
 
     - name: Lint
       run: npm run lint
@@ -106,7 +106,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install updated template dependencies
-        run: npm ci
+        run: npm clean-install --progress=false --no-fund
         working-directory: ./playcanvas-jsdoc-template
 
       - name: Build updated template
@@ -114,7 +114,7 @@ jobs:
         working-directory: ./playcanvas-jsdoc-template
         
       - name: Install engine dependencies
-        run: npm ci
+        run: npm clean-install --progress=false --no-fund
         working-directory: ./engine
 
       - name: Read origional conf-api.json
