@@ -1,3 +1,10 @@
+/* eslint-disable import/extensions */
+
+// jsdoc 4.x imports are added to the environment dynamically by the
+// jsdoc.js file using 'requizzle'.  Lint rules can not see this causing
+// the following require statements to produce an error.  This changes in
+// version 5 with the move to es modules.
+
 const fs = require('jsdoc/fs');
 const helper = require('jsdoc/util/templateHelper');
 const path = require('jsdoc/path');
