@@ -15,4 +15,14 @@
         {{/each}}
     </table>
     {{/if}}
+    {{#if obj.properties}}
+    <h4>Properties</h4>
+    <table>
+        {{#each obj.properties}}
+        <tr>
+            <td>{{name}}</td><td>{{{type-link type}}}</td><td>{{{parse description}}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
 </div>
