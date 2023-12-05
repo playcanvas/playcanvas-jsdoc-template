@@ -303,6 +303,14 @@ const builtins = {
     "*": "#" // blerg
 };
 
+/**
+ * These are real @typedef's, neither callbacks nor import('abc').xyz
+ * This means they all have at least one property in `properties`.
+ *
+ * @type {Record<string, import('jsdoc').Doclet}
+ */
+const realTypedefs = {};
+
 // Return an anchor link string from a type
 const typeLink = (type) => {
     // Get the name from string or type object
@@ -446,14 +454,6 @@ var setup = function (opts, callback) {
         }
     });
 };
-
-/**
- * These are real @typedef's, neither callbacks nor import('abc').xyz
- * This means they all have at least one property in `properties`.
- *
- * @type {Record<string, import('jsdoc').Doclet}
- */
-const realTypedefs = {};
 
 /**
  * @param {TAFFY} taffyData - See <http://taffydb.com/>.
