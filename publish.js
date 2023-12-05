@@ -304,6 +304,14 @@ const builtins = {
     "*": "#" // blerg
 };
 
+/**
+ * These are real @typedef's, neither callbacks nor import('abc').xyz
+ * This means they all have at least one property in `properties`.
+ *
+ * @type {Record<string, import('jsdoc').Doclet}
+ */
+const realTypedefs = {};
+
 // Return an anchor link string from a type
 const typeLink = (type) => {
     // Get the name from string or type object
@@ -321,7 +329,7 @@ const typeLink = (type) => {
     const builtin = builtins[name.toLowerCase()];
     if (builtin) {
         url = builtin;
-    } else if (name.endsWith('Callback')) {
+    } else if (name.endsWith('Callback') || realTypedefs[type]) {
         url = `pc.html#${name}`;
     } else {
         url = clsUrl(name);
@@ -473,6 +481,12 @@ exports.publish = (taffyData, opts, tutorials) => {
 
         // Strip all typedefs that are not callbacks
         data(function () {
+            if (this.kind === 'typedef' && !this.name.endsWith('Callback')) {
+                if (this.properties?.length) {
+                    realTypedefs[this.name] = this;
+                    return false;
+                }
+            }
             return this.kind === 'typedef' && !this.name.endsWith('Callback');
         }).remove();
 
